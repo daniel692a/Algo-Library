@@ -12,9 +12,11 @@
 
 #### Algorithms
 
+* [Selection Sortr](./SelectionSort/)
 * [Insertion Sort](./InsertionSort/)
 * [Merge Sort](./MergeSort/)
 
 #### Data Structures
 
+* [Static Stack](./StaticStack/)
 * [Dynamic Stack](./Stack/)
