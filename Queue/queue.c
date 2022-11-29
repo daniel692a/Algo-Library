@@ -85,6 +85,8 @@ int getLen(struct Node* head){
     return len;
 }
 
+
+// O(nlogn) -> Merge Sort
 struct Node *getMid(struct Node *head, int *error){
     struct Node *midPrev = NULL;
     while (head && head->next){

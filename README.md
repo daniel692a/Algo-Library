@@ -20,3 +20,6 @@
 
 * [Static Stack](./StaticStack/)
 * [Dynamic Stack](./Stack/)
+* [Queue](./Queue/)
+* [Biqueue](./BiQueue/)
+* [Singly Linked List](./SinglyLinkedList/)
