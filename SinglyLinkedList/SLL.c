@@ -38,7 +38,9 @@ void insertEnd(SinglyList *l, Data val, int *error){
             aux = aux->next;
         }
         new->value = val;
-        new->pos = (aux->pos)+1;
+        int tempPos = aux->pos;
+        int newPos =tempPos+1;
+        new->pos = newPos;
         new->next = NULL;
         aux->next = new;
         *error = 0;
@@ -67,8 +69,10 @@ void insertStart(SinglyList *l, Data val, int *error){
         (*l)->next = aux;
         aux = *l;
         aux = aux->next;
-        while (aux->next != NULL){
-            aux->pos = (aux->pos)+1;
+        while (aux != NULL){
+            int tempPos = aux->pos;
+            int newPos = tempPos + 1;
+            aux->pos = newPos;
             aux = aux->next;
         }
     }
@@ -92,14 +96,14 @@ void insertNposition(SinglyList *l, Data val, int *error, int position){
     new->next = NULL;
     new->pos = position;
 
-    while (aux->next != NULL){
+    while (aux != NULL){
         if (aux->pos == position - 1){
             exists = true;
             new->next = aux->next;
             aux->next = new;
-            aux = aux->next;
-            while (aux->next != NULL){
-                aux->pos++;
+            aux = aux->next->next;
+            while (aux != NULL){
+                aux->pos=aux->pos+1;
                 aux = aux->next;
             }
             *error = 0;
@@ -125,14 +129,14 @@ void removeStart(SinglyList *l, int *error){
         *error = -1;
     } else {
         Data extract = (*l)->value;
-        printf("%d ", extract);
+        printf("%d \n", extract);
         SinglyList aux = *l;
         *l=(*l)->next;
         aux->next=NULL;
         free(aux);
         aux = *l;
-        while (aux->next != NULL){
-            aux->pos--;
+        while (aux != NULL){
+            aux->pos=aux->pos-1;
             aux = aux->next;
         }
         *error = 0;
@@ -155,8 +159,8 @@ void removeEnd(SinglyList *l, int *error){
             aux = aux->next;
         }
         Data extract = aux->next->value;
-        printf("%d ", extract);
-        free(aux);
+        printf("%d \n", extract);
+        free(aux->next);
         aux->next=NULL;
         *error = 0;
     }
@@ -177,18 +181,18 @@ void removeN(SinglyList *l, int *error, int npos){
     } else {
         SinglyList aux = *l;
         bool exists = false;
-        while (aux->next != NULL){
+        while (aux != NULL){
             if (aux->pos == npos - 1){
                 exists = true;
                 SinglyList aux2 = aux->next;
                 Data extract = aux2->value;
-                printf("%d ", extract);
+                printf("%d \n", extract);
                 aux->next = aux2->next;
                 aux2->next = NULL;
                 free(aux2);
                 aux=aux->next;
-                while (aux->next != NULL){
-                    aux->pos--;
+                while (aux != NULL){
+                    aux->pos=aux->pos-1;
                     aux = aux->next;
                 }
                 *error = 0;
@@ -210,7 +214,7 @@ void printList(SinglyList current){
     if(current == NULL){
         return;
     }
-    printf("%d %d\n", current->value, current->pos);
+    printf("Value: %d, Position: %d\n", current->value, current->pos);
     printList(current->next);
 }
 /*
@@ -276,11 +280,13 @@ SinglyList *copyList(SinglyList *l, int *error){
         return NULL;
     } else {
         SinglyList aux = *l;
-        while(aux->next!=NULL){
-            (*copy)->value = aux->value;
-            (*copy)->pos = aux->pos;
-            (*copy)->next = aux->next;
+        SinglyList aux2 = *copy;
+        while(aux != NULL){
+            aux2->value = aux->value;
+            aux2->pos = aux->pos;
+            aux2->next = aux->next;
             aux = aux->next;
+            aux2 = aux2->next;
         }
         *error = 0;
         return copy;
