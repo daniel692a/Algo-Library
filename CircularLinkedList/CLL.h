@@ -6,15 +6,19 @@
 typedef int Data;
 
 struct Node{
-    Data val;
+    Data value;
     int pos;
     struct Node *next;
 };
 
-typedef struct Node* List;
+typedef struct Node* CircularList;
 
-List* createList(int *error);
-Data extractStart(List *l, int *error);
-Data extractEnd(List *l, int *error);
-void insertStart(Data val, List *l, int *error);
-void insertEnd(Data val, List *l, int *error);
+CircularList *createCList(int *error);
+Data extractStart(CircularList *cl, int *error);
+Data extractEnd(CircularList *cl, int *error);
+void insertStart(Data val, CircularList *cl, int *error);
+void insertEnd(Data val, CircularList *cl, int *error);
+void clearCList(CircularList *cl, int *error);
+void showCList(CircularList *cl, int *error);
+void countNodes(CircularList *cl, int *error);
+bool isEmpty(CircularList cl, int *error);
