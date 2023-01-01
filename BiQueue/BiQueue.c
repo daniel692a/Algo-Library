@@ -7,7 +7,7 @@
 BiQueue* createBiQueue(int *error){
     BiQueue *newBiQueue = malloc(sizeof(BiQueue));
     if(newBiQueue==NULL){
-        perror("No hay memoria para la Stack");
+        perror("No hay memoria para la Bicola");
         *error = -2;
         return NULL;
     }
@@ -87,14 +87,14 @@ Data dequeue(BiQueue *bq, int *error){
         if (bq->size==1){
             bq->head = NULL;
             bq->tail = NULL;
-            bq->size--;
+            bq->size = 0;
         } else {
             bq->head = bq->head->next;
-            bq->size--;
+            bq->size = bq->size-1;
         }
         *error=0;
+        return aux->value;
     }
-    return aux->value;
 }
 
 /*
@@ -120,8 +120,7 @@ bool isEmpty(BiQueue q, int *error){
     if (q.size == 0){
         *error = -3;
         return true;
-    }
-    else{
+    } else {
         *error = 0;
         return false;
     }
@@ -136,11 +135,12 @@ void clear(BiQueue *bq, int *error){
     struct Node *aux = malloc(sizeof(struct Node));
     while(!isEmpty(*bq, error)){
         aux = bq->head;
-        aux->next = NULL;
         printf("Eliminando nodo con valor: %d\n", aux->value);
         bq->head = bq->head->next;
-        *error = 0;
+        bq->size = bq->size - 1;
     }
+    free(aux);
+    *error = 0;
 }
 
 /*
@@ -166,6 +166,7 @@ void deleteBiQueue(BiQueue *bq, int *error){
 */
 void iterateBiQueue(BiQueue *bq, int *error){
     struct Node *temp = bq->head;
+    printf("----------------------\n");
     while(temp){
         printf("%d \n", temp->value);
         temp = temp->next;

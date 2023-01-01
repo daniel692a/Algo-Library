@@ -5,18 +5,28 @@
 
 typedef int Data;
 
+/*
+    struct Node
+    value->next
+*/
 typedef struct Node{
     Data value;
     struct Node* next;
 };
 
+/*
+    struct Tail
+    value->value->value->value->NULL
+      |                    |
+    head                 tail
+*/
 typedef struct {
     struct Node *head;
     struct Node *tail;
     int size;
 } BiQueue;
 
-BiQueue *createBiQueue(int *error);
+BiQueue* createBiQueue(int *error);
 void enqueue(BiQueue *bq, int *error, struct Node newNode);
 void enqueueStart(BiQueue *bq, int *error, struct Node newNode);
 Data dequeue(BiQueue *bq, int *error);
