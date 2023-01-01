@@ -23,4 +23,7 @@
 * [Queue](./Queue/)
 * [Biqueue](./BiQueue/)
 * [Singly Linked List](./SinglyLinkedList/)
-* [Circular Linked lIst](./CircularLinkedList/)
+* [Circular Linked List](./CircularLinkedList/)
+* [Dobly Linked List](./DoublyLinkedList/)
+* [Dobly Circular Linked List](./DoublyCircularLinkedList/)
+* [Binary Search Tree](./BST/)
