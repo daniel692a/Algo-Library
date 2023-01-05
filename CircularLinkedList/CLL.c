@@ -6,11 +6,11 @@
 */
 CircularList *createCList(int *error){
     CircularList *newCLL = malloc(sizeof(CircularList));
-    if(newCLL==NULL){
+    if(*newCLL==NULL){
         perror("No se puede crear la lista");
         *error = -1;
     } else {
-        newCLL = NULL;
+        *newCLL = NULL;
         *error = 0;
     }
     return newCLL;
@@ -21,31 +21,28 @@ CircularList *createCList(int *error){
     @param cl Cola Circualr
     @param error Manejador de errores
 */
-Data extractStart(CircularList *cl, int *error){
+Data extractBeginCL(CircularList *cl, int *error){
     if(*cl==NULL){
         perror("La lista esta vacia");
         *error = -1;
         return -1;
     } else {
-        CircularList aux = *cl;
-        Data extract;
-        while(aux->next!=*cl){
-            aux=aux->next;
-        }
-        extract = aux->value;
-        if(aux==*cl){
+        struct Node *aux = *cl;
+        Data extract = (*cl)->value;
+
+        if(aux->next==*cl){
             *cl = NULL;
-            aux->next = NULL;
-            free(aux);
-        } else {
-            aux->next=(*cl)->next;
-            aux = *cl;
-            *cl = (*cl)->next;
-            aux = NULL;
+            return extract;
         }
-        aux=*cl;
+
+        while (aux->next!=*cl){
+            aux = aux->next;
+        }
+        struct Node *aux2 = *cl;
+        aux->next = aux2->next;
+        *cl = (*cl)->next;
+        aux = *cl;
         int i = 0;
-        aux = aux->next;
         while (aux->next!=*cl){
             aux->pos=i;
             aux = aux->next;
@@ -62,25 +59,69 @@ Data extractStart(CircularList *cl, int *error){
     @param cl Cola Circualr
     @param error Manejador de errores
 */
-Data extractEnd(CircularList *cl, int *error){
+Data extractEndCL(CircularList *cl, int *error){
     if(*cl==NULL){
         perror("Lista Vacia");
         *error = -1;
         return -1;
     } else {
         Data extract;
-        CircularList aux = *cl;
+        struct Node *aux = *cl;
+
+        if(aux->next==*cl){
+            extract = aux->value;
+            *cl = NULL;
+            return extract;
+        }
+
         while(aux->next->next!=*cl){
             aux = aux->next;
         }
-        CircularList aux2 = aux->next;
+        struct Node *aux2 = aux->next;
         aux2->next = NULL;
         extract =  aux2->value;
         aux->next=*cl;
-        free(aux);
-        free(aux2);
         *error = 0;
         return extract;
+    }
+}
+
+/*
+    @def Función para extraer de una posición
+    @param cl Cola Circualr
+    @param error Manejador de errores
+    @param pos Posición a extraer
+*/
+Data extractNCL(CircularList *cl, int *error, int npos){
+    if(npos==0){
+        return extractBeginCL(cl, error);
+    }
+    if(*cl==NULL){
+        perror("No puedes extraer:(");
+        *error = -1;
+        return -1;
+    } else {
+        Data extract;
+        struct Node *aux = *cl;
+        while(aux->next!=*cl){
+            if(aux->pos==npos-1){
+                extract = aux->next->value;
+                struct Node *aux2 = aux->next;
+                aux->next = aux2->next;
+                aux = aux->next;
+                while (aux->next!=*cl){
+                    aux->pos=aux->pos-1;
+                    aux = aux->next;
+                }
+                aux->pos = aux->pos - 1;
+                *error = 0;
+                return extract;
+            }
+            aux = aux->next;
+        }
+        perror("No se encontro la posición");
+        *error = -1;
+        return -1;
     }
 }
 
@@ -90,26 +131,27 @@ Data extractEnd(CircularList *cl, int *error){
     @param cl Cola Circualr
     @param error Manejador de errores
 */
-void insertStart(Data val, CircularList *cl, int *error){
+void insertBeginCL(Data val, CircularList *cl, int *error){
+    struct Node *node = malloc(sizeof(struct Node));
+    node->value = val;
     if(*cl==NULL){
-        (*cl)->value = val;
-        (*cl)->next = *cl;
-        (*cl)->pos = 0;
+        *cl = node;
+        node->next = node;
+        node->pos = 0;
         *error = 0;
     } else {
-        CircularList aux = *cl;
+        struct Node *aux = *cl;
         int i=1;
         while(aux->next!=*cl){
             aux->pos=i;
             aux = aux->next;
             i++;
         }
-        CircularList *temp;
-        (*temp)->value = val;
-        (*temp)->next = *cl;
-        (*temp)->pos = 0;
-        aux->next=*temp;
-        *cl = *temp;
+        aux->pos = i;
+        node->next = *cl;
+        node->pos = 0;
+        aux->next = node;
+        *cl = node;
     }
     *error = 0;
 }
@@ -120,26 +162,66 @@ void insertStart(Data val, CircularList *cl, int *error){
     @param cl Cola Circualr
     @param error Manejador de errores
 */
-void insertEnd(Data val, CircularList *cl, int *error){
+void insertEndCL(Data val, CircularList *cl, int *error){
+    struct Node *node = malloc(sizeof(struct Node));
+    node->value = val;
     if(*cl==NULL){
-        (*cl)->value = val;
-        (*cl)->next = *cl;
-        (*cl)->pos = 0;
+        *cl = node;
+        node->next = node;
+        node->pos = 0;
         *error = 0;
     } else {
-        CircularList aux = *cl;
+        struct Node *aux = *cl;
         int prevPos;
         while(aux->next!=*cl){
-            prevPos = aux->pos;
             aux = aux->next;
         }
-        CircularList *temp;
-        (*temp)->value = val;
-        (*temp)->pos = prevPos+1;
-        (*temp)->next = *cl;
-        aux->next = *temp;
+        prevPos = aux->pos;
+        node->pos = prevPos+1;
+        node->next = *cl;
+        aux->next = node;
     }
     *error = 0;
+}
+
+/*
+    @def Función para insertar en una posicion n
+    @param val Valor que vamos a insertar
+    @param cl Cola Circualr
+    @param error Manejador de errores
+    @param npos Posicion en la que vamos a insertar
+*/
+void insertNCL(Data val, CircularList *cl, int *error, int npos){
+    struct Node *node = malloc(sizeof(struct Node));
+    node->value = val;
+    if(*cl==NULL && npos!=0){
+        perror("No puedes hacer esta operacion");
+        *error = -1;
+    } else if(*cl==NULL && npos==0){
+        insertBeginCL(val, cl, error);
+    } else {
+        struct Node *aux = *cl;
+        while (aux->next!=*cl){
+            if(aux->pos==npos-1){
+                node->pos = npos;
+                node->next = aux->next;
+                aux->next = node;
+                aux = aux->next->next;
+                while(aux->next!=*cl){
+                    aux->pos = aux->pos+1;
+                    aux = aux->next;
+                }
+                aux->pos = aux->pos+1;
+                *error = 0;
+                break;
+            }
+            aux = aux->next;
+        }
+        *error = 0;
+        if(npos==aux->pos+1){
+            insertEndCL(val, cl, error);
+        }
+    }
 }
 
 /*
@@ -147,7 +229,7 @@ void insertEnd(Data val, CircularList *cl, int *error){
     @param cl Cola Circular
     @param error Manejador de errores
 */
-bool isEmpty(CircularList cl, int *error){
+bool isEmptyCL(CircularList cl, int *error){
     if(cl==NULL){
         return true;
     } else {
@@ -166,8 +248,8 @@ void clearCList(CircularList *cl, int *error){
         *error = -1;
     } else {
         Data temp;
-        while(!isEmpty(*cl, error)){
-            temp = extractStart(cl, error);
+        while(!isEmptyCL(*cl, error)){
+            temp = extractBeginCL(cl, error);
             printf("Eliminado %d\n", temp);
         }
         free(cl);
@@ -189,6 +271,7 @@ void showCList(CircularList *cl, int *error){
             printf("Valor: %d\tPosicion: %d\n", aux->value, aux->pos);
             aux = aux->next;
         }
+        printf("Valor: %d\tPosicion: %d\n", aux->value, aux->pos);
         *error = 0;
     }
 }
@@ -198,18 +281,19 @@ void showCList(CircularList *cl, int *error){
     @param cl Cola Circualr
     @param error Manejador de errores
 */
-void countNodes(CircularList *cl, int *error){
+void countNodesCL(CircularList *cl, int *error){
     if(*cl==NULL){
         printf("Esta vacía\n");
         *error = -1;
     } else {
-        CircularList aux = *cl;
+        struct Node *aux = *cl;
         int counter = 0;
         while(aux->next!=*cl){
             counter++;
             aux = aux->next;
         }
-        printf("Existen %d nodos en la lista", counter);
+        counter++;
+        printf("Existen %d nodos en la lista\n", counter);
         *error=0;
     }
 }
