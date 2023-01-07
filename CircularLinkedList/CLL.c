@@ -6,7 +6,7 @@
 */
 CircularList *createCList(int *error){
     CircularList *newCLL = malloc(sizeof(CircularList));
-    if(*newCLL==NULL){
+    if(newCLL==NULL){
         perror("No se puede crear la lista");
         *error = -1;
     } else {
@@ -252,7 +252,6 @@ void clearCList(CircularList *cl, int *error){
             temp = extractBeginCL(cl, error);
             printf("Eliminado %d\n", temp);
         }
-        free(cl);
     }
 }
 
@@ -295,5 +294,80 @@ void countNodesCL(CircularList *cl, int *error){
         counter++;
         printf("Existen %d nodos en la lista\n", counter);
         *error=0;
+    }
+}
+
+
+int searchCList(CircularList *cl, int val, int *error){
+    if(*cl==NULL){
+        perror("No puedes hacer esta operacion\n");
+        *error = -1;
+    } else {
+        struct Node *aux = *cl;
+        while(aux->next!=*cl){
+            if(aux->value==val){
+                return aux->pos;
+            }
+            aux = aux->next;
+        }
+        if(aux->value==val){
+            return aux->pos;
+        }
+        return -1;
+    }
+}
+
+void updateNodeCL(CircularList *cl, int *error, int npos, Data val){
+    if(*cl==NULL){
+        perror("No puedes hacer esta operacion\n");
+        *error = -1;
+    } else {
+        struct Node *aux = *cl;
+        bool exists = false;
+        while(aux->next!=*cl){
+            if(aux->pos==npos){
+                aux->value = val;
+                *error = 0;
+                exists = true;
+                return;
+            }
+            aux = aux->next;
+        }
+        if(aux->pos==npos){
+            aux->value = val;
+            exists = true;
+            *error = 0;
+        }
+        if(!exists){
+            perror("No existe el nodo");
+            *error = -1;
+        }
+    }
+}
+
+CircularList *copyCList(CircularList *cl, int *error){
+    if(*cl==NULL){
+        perror("No puedes hacer esta operacion\n");
+        *error = -1;
+    } else {
+        CircularList *newCL = malloc(sizeof(CircularList));
+        struct Node *aux = *cl;
+        while(aux->next!=*cl){
+            insertEndCL(aux->value, newCL, error);
+            aux = aux->next;
+        }
+        insertEndCL(aux->value, newCL, error);
+        return newCL;
+    }
+}
+
+void deleteCList(CircularList *cl, int *error){
+    if(*cl==NULL){
+        perror("No puedes hacer esta operacion\n");
+        *error = -1;
+    } else {
+        clearCList(cl, error);
+        free(cl);
+        printf("Lista eliminada\n");
     }
 }

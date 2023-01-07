@@ -313,3 +313,41 @@ void deleteSLL(SinglyList *l, int *error){
         *error = 0;
     }
 }
+
+void countNodesSL(SinglyList *l, int *error){
+    if(l==NULL){
+        perror("No hay valores en la Lista");
+        *error = -1;
+        return;
+    }
+    int counter = 0;
+    SinglyList aux = *l;
+    while(aux != NULL){
+        counter++;
+        aux = aux->next;
+    }
+    printf("La lista tiene %d nodos\n", counter);
+}
+
+void updateNode(SinglyList *l, int *error, int npos, Data val){
+    if(l==NULL && npos!=0){
+        perror("No hay valores en la Lista");
+        *error = -1;
+        return;
+    }
+    SinglyList aux = *l;
+    bool exists = false;
+    while(aux != NULL){
+        if(aux->pos == npos){
+            aux->value = val;
+            *error = 0;
+            exists = true;
+            return;
+        }
+        aux = aux->next;
+    }
+    if(!exists){
+        perror("La posicion no existe\n");
+        *error = -2;
+    }
+}

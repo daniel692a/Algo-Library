@@ -21,6 +21,8 @@ int main(){
         puts("8.Buscar elemento");
         puts("9.Copiar Lista");
         puts("10.Limpiar Lista");
+        puts("11.Contar Nodos");
+        puts("12.Modificar Nodo");
         puts("------------------");
         scanf("%d", &option);
         switch (option){
@@ -66,6 +68,14 @@ int main(){
             case 10:
                 clearList(mysll, &error);
                 break;
+            case 11:
+                countNodesSL(mysll, &error);
+                break;
+            case 12:
+                puts("Inserte la posición y el valor");
+                scanf("%d %d", &position, &data.value);
+                updateNode(mysll, &error, position, data.value);
+                break;
             default:
                 puts("No es una opción válida");
                 break;
@@ -77,6 +87,5 @@ int main(){
     deleteSLL(myCopy, &error);
     deleteSLL(mysll, &error);
     puts("Gracias por usar el programa:)");
-    return 0;
     return 0;
 }
