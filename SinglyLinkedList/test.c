@@ -1,40 +1,82 @@
 #include "SLL.h"
 
 int main(){
-    int error=0;
-    SinglyList *myLL = createLL(&error);
-
-    insertEnd(myLL, 5, &error);
-    insertEnd(myLL, 10, &error);
-    insertEnd(myLL, 189, &error);
-    insertStart(myLL, 4, &error);
-    showList(myLL, &error);
-
-    printf("\n");
-    insertEnd(myLL, 7, &error);
-    showList(myLL, &error);
-    printf("\n");
-
-    insertNposition(myLL, 0, &error, 1);
-    showList(myLL, &error);
-    printf("\n");
-
-    removeStart(myLL, &error);
-    showList(myLL, &error);
-    printf("\n");
-
-    removeEnd(myLL, &error);
-    showList(myLL, &error);
-    printf("\n");
-
-    removeN(myLL, &error, 2);
-    showList(myLL, &error);
-    printf("\n");
-
-    searchItem(myLL, &error, 180);
-
-    SinglyList *copyLL = copyList(myLL, &error);
-    showList(copyLL, &error);
-
+    int error = 0;
+    SinglyList *mysll = createLL(&error);
+    SinglyList *myCopy;
+    struct Node data;
+    Data extract;
+    int answer;
+    int option;
+    int position;
+    do{
+        puts("Menú de ususario");
+        puts("1.Insertar al Inicio");
+        puts("2.Insertar al Final");
+        puts("3.Insertar en N posición");
+        puts("4.Eliminar al Inicio");
+        puts("5.Eliminar al Final");
+        puts("6.Eliminar en N posición");
+        puts("7.Mostrar Lista");
+        puts("8.Buscar elemento");
+        puts("9.Copiar Lista");
+        puts("10.Limpiar Lista");
+        puts("------------------");
+        scanf("%d", &option);
+        switch (option){
+            case 1:
+                puts("Inserte valor");
+                scanf("%d", &data.value);
+                insertStart(mysll, data.value, &error);
+                break;
+            case 2:
+                puts("Inserte valor");
+                scanf("%d", &data.value);
+                insertEnd(mysll, data.value, &error);
+                break;
+            case 3:
+                puts("Inserte valor y la posición");
+                scanf("%d %d", &data.value, &position);
+                insertNposition(mysll, data.value, &error, position);
+                break;
+            case 4:
+                removeStart(mysll, &error);
+                break;
+            case 5:
+                removeEnd(mysll, &error);
+                break;
+            case 6:
+                puts("Inserte la posición");
+                scanf("%d", &position);
+                removeN(mysll, &error, position);
+                break;
+            case 7:
+                showList(mysll, &error);
+                break;
+            case 8:
+                puts("Inserte el valor a buscar");
+                scanf("%d", &data.value);
+                int answer = searchList(*mysll, data.value);
+                printf("El valor se encuentra en la posición %d\n", answer);
+                break;
+            case 9:
+                myCopy = copyList(mysll, &error);
+                showList(myCopy, &error);
+                break;
+            case 10:
+                clearList(mysll, &error);
+                break;
+            default:
+                puts("No es una opción válida");
+                break;
+        }
+        puts("¿Desea continuar?\t1-Sí\t2-No");
+        scanf("%d", &answer);
+        puts("------------------");
+    } while (answer == 1);
+    deleteSLL(myCopy, &error);
+    deleteSLL(mysll, &error);
+    puts("Gracias por usar el programa:)");
+    return 0;
     return 0;
 }

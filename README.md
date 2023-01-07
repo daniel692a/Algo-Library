@@ -12,7 +12,7 @@
 
 #### Algorithms
 
-* [Selection Sortr](./SelectionSort/)
+* [Selection Sort](./SelectionSort/)
 * [Insertion Sort](./InsertionSort/)
 * [Merge Sort](./MergeSort/)
 

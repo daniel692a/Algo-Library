@@ -22,6 +22,7 @@ void removeStart(SinglyList *l, int *error);
 void removeEnd(SinglyList *l, int *error);
 void removeN(SinglyList *l, int *error, int npos);
 void showList(SinglyList *l, int *error);
-void searchItem(SinglyList *l, int *error, int value);
+int searchList(SinglyList current, int val);
 void clearList(SinglyList *l, int *error);
 SinglyList* copyList(SinglyList *l, int *error);
+void deleteSLL(SinglyList *l, int *error);

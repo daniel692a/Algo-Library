@@ -129,7 +129,7 @@ void removeStart(SinglyList *l, int *error){
         *error = -1;
     } else {
         Data extract = (*l)->value;
-        printf("%d \n", extract);
+        printf("Valor extraido: %d \n", extract);
         SinglyList aux = *l;
         *l=(*l)->next;
         aux->next=NULL;
@@ -159,7 +159,7 @@ void removeEnd(SinglyList *l, int *error){
             aux = aux->next;
         }
         Data extract = aux->next->value;
-        printf("%d \n", extract);
+        printf("Valor extraido: %d \n", extract);
         free(aux->next);
         aux->next=NULL;
         *error = 0;
@@ -186,7 +186,7 @@ void removeN(SinglyList *l, int *error, int npos){
                 exists = true;
                 SinglyList aux2 = aux->next;
                 Data extract = aux2->value;
-                printf("%d \n", extract);
+                printf("Valor extraido: %d \n", extract);
                 aux->next = aux2->next;
                 aux2->next = NULL;
                 free(aux2);
@@ -229,6 +229,7 @@ void showList(SinglyList *l, int *error){
         *error = -1;
     } else {
         printList(aux);
+        puts("------------------");
         *error = 0;
     }
 }
@@ -280,15 +281,35 @@ SinglyList *copyList(SinglyList *l, int *error){
         return NULL;
     } else {
         SinglyList aux = *l;
-        SinglyList aux2 = *copy;
         while(aux != NULL){
-            aux2->value = aux->value;
-            aux2->pos = aux->pos;
-            aux2->next = aux->next;
+            insertEnd(copy, aux->value, error);
             aux = aux->next;
-            aux2 = aux2->next;
         }
         *error = 0;
         return copy;
+    }
+}
+
+void clearList(SinglyList *l, int *error){
+    SinglyList aux = *l;
+    while(aux != NULL){
+        Data extract = aux->value;
+        printf("Valor extraído: %d \n", extract);
+        *l = (*l)->next;
+        free(aux);
+        aux = *l;
+    }
+    *error = 0;
+}
+
+void deleteSLL(SinglyList *l, int *error){
+    if(l==NULL){
+        perror("No hay valores en la Lista");
+        *error = -1;
+    } else {
+        clearList(l, error);
+        puts("Lista eliminada");
+        free(l);
+        *error = 0;
     }
 }
