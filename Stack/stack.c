@@ -30,22 +30,23 @@ void push(Stack *s, int *error, struct Node newValue){
     nodeUser->value = newValue.value;
     nodeUser->below = s->top;
     s->top = nodeUser;
-    s->size++;
+    s->size=s->size+1;
     *error = 0;
 }
 
-int pop(Stack *s, int *error, struct Node *remove){
+Value pop(Stack *s, int *error){
     if (!isEmpty(*s, error)){
         struct Node *aux = s->top;
-        remove->value = aux->value;
+        Value answer = aux->value;
         s->top = aux->below;
         aux->below = NULL;
-        s->size--;
+        s->size=s->size-1;
         free(aux);
         *error = 0;
-        return aux->value;
+        return answer;
     } else {
         *error = -3;
+        perror("No puedes realizar esta operacion");
     }
     return -1;
 }
@@ -60,11 +61,10 @@ bool isEmpty(Stack s, int *error){
     }
 }
 
-void clear(Stack *s, int *error){
+void clearStack(Stack *s, int *error){
     while (!isEmpty(*s, error)){
-        struct Node remove;
-        pop(s, error, &remove);
-        printf("Valor extraido: %d\n", remove.value);
+        Value extract = pop(s, error);
+        printf("Valor extraido: %d\n", extract);
         *error = 0;
     }
 }
@@ -75,5 +75,18 @@ void deleteStack(Stack *s, int *error){
         free(s);
     } else {
         puts("No se puede destruir debido a que contiene información");
+    }
+}
+
+void showStack(Stack s, int *error){
+    if (!isEmpty(s, error)){
+        struct Node *aux = s.top;
+        while (aux != NULL){
+            printf("%d ", aux->value);
+            aux = aux->below;
+        }
+        printf("\n");
+    } else {
+        perror("No se puede mostrar debido a que la Stack está vacía");
     }
 }

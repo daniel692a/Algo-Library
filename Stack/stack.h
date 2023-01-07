@@ -17,7 +17,8 @@ typedef struct{
 Stack *createStack(int *error);
 void getTop(Stack p, int *error);
 void push(Stack *p, int *error, struct Node newValue);
-int pop(Stack *p, int *error, struct Node *remove);
+Value pop(Stack *p, int *error);
 bool isEmpty(Stack p, int *error);
-void clear(Stack *s, int *error);
+void clearStack(Stack *s, int *error);
 void deleteStack(Stack *p, int *error);
+void showStack(Stack s, int *error);
