@@ -15,6 +15,7 @@ int main(){
         puts("4.Contar nodos");
         puts("5.Limpiar la bicola");
         puts("6.Mostrar la bicola");
+        puts("------------------");
         scanf("%d", &option);
         switch (option){
             case 1:
@@ -42,11 +43,12 @@ int main(){
                 iterateBiQueue(myBiQueue, &error);
                 break;
             default:
-                puts("No es una opción válida\n");
+                puts("No es una opción válida");
                 break;
         }
-        puts("¿Desea continuar?\n1-Sí\t2-No");
+        puts("¿Desea continuar?\t1-Sí\t2-No");
         scanf("%d", &answer);
+        puts("------------------");
     } while (answer==1);
     deleteBiQueue(myBiQueue, &error);
     puts("Gracias por usar el programa:)");

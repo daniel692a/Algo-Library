@@ -31,7 +31,7 @@ void enqueue(Queue *q, int *error, struct Node newNode){
         q->tail = q->tail->next;
     }
     *error = 0;
-    q->size++;
+    q->size=q->size+1;
 }
 
 Data dequeue(Queue *q, int *error){
@@ -46,10 +46,10 @@ Data dequeue(Queue *q, int *error){
         if (q->size==1){
             q->head = NULL;
             q->tail = NULL;
-            q->size--;
+            q->size=0;
         } else {
             q->head = q->head->next;
-            q->size--;
+            q->size = q->size-1;
         }
         *error=0;
     }
@@ -60,8 +60,7 @@ bool isEmpty(Queue q, int *error){
     if (q.size == 0){
         *error = -3;
         return true;
-    }
-    else{
+    } else {
         *error = 0;
         return false;
     }
@@ -71,10 +70,22 @@ void clear(Queue *q, int *error){
     while(!isEmpty(*q, error)){
         Data retVal;
         retVal = dequeue(q, error);
-        printf("Valor obtenido: %d", retVal);
+        printf("Valor obtenido: %d\n", retVal);
         *error = 0;
     }
 }
+
+void deleteQueue(Queue *q, int *error){
+    if(isEmpty(*q, error)){
+        perror("No hay información en la cola\n");
+        *error = -1;
+    } else{
+        clear(q, error);
+        free(q);
+        *error=0;
+    }
+}
+
 int getLen(struct Node* head){
     int len = 0;
     struct Node *temp = head;
@@ -133,7 +144,7 @@ void iterateQueue(Queue *q, int *error){
         printf("%d ", temp->value);
         temp = temp->next;
     }
-    printf("\n");
+    printf("------------------\n");
     *error = 0;
 }
 
@@ -143,6 +154,6 @@ void iterateNodes(struct Node *h, int *error){
         printf("%d ", temp->value);
         temp = temp->next;
     }
-    printf("\n");
+    printf("------------------\n");
     *error = 0;
 }

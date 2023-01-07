@@ -96,8 +96,8 @@ void showDCLL(DCLL *l, int *error){
         *error = -1;
     } else {
         Node* aux = *l;
-        while(aux->next != NULL){
-            printf("%d , %d  ||  ", aux->value, aux->pos);
+        while(aux->next != *l){
+            printf("%d , %d\n", aux->value, aux->pos);
             aux = aux->next;
         }
         printf("%d , %d  ||  ", aux->value, aux->pos);
@@ -144,7 +144,7 @@ void extractNDCLL(DCLL *l, Data *val, int pos, int *error) {
         *error = -1;
     } else if(pos == 0){
         extractBeginDCLL(l, val, error);
-    } else if(pos == longitud(*l)-1){
+    } else if(pos == lengthDCLL(*l)-1){
         extractEndDCLL(l, val, error);
     } else {
         Node* aux;
