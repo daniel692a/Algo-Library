@@ -18,14 +18,6 @@ DoublyLL *create_doublyLL(int *error){
     return l;
 }
 
-DoublyLL create_doubly2(int *error){
-    DoublyLL l = (DoublyLL)malloc(sizeof(DoublyLL));
-    if(l == NULL)
-        *error = 1;
-    l = NULL;
-    *error = 0;
-    return l;
-}
 
 void insertEndDoubly(DoublyLL* lista, Data dato, int* error){
     Node* nuevo = create_Node(dato, error);
@@ -78,7 +70,7 @@ void insertNDoubly(DoublyLL *l, Data valor, int pos, int *error){
         (*l)->pos = 1;
     } else if(pos == 0) {
         insertStartDoubly(l, valor, error);
-    } else if(pos == longitud(*l)) {
+    } else if(pos == lengthDoublyLL(*l)-1) {
         insertEndDoubly(l, valor, error);
     } else {
         Node* aux = *l;
@@ -116,12 +108,14 @@ void showDoublyLL(DoublyLL *l, int *error){
     }
 }
 
-void extractBeginDoubly(DoublyLL *l, Data *valor, int *error){
+Data extractBeginDoubly(DoublyLL *l, int *error){
     if(*l == NULL){
-        *error = 1;
+        perror("Lista vacia");
+        *error = -1;
+        return -1;
     }else{
         Node* aux = *l;
-        *valor = aux->valor;
+        Data answer = aux->valor;
         *l = (*l)->sig;
         aux->sig = NULL;
         free(aux);
@@ -135,39 +129,45 @@ void extractBeginDoubly(DoublyLL *l, Data *valor, int *error){
             }
             aux->pos = aux->pos - 1;
         }
+        return answer;
     }
     *error = 0;
 }
 
-void extractEndDoubly(DoublyLL *l, Data *valor, int *error){
+Data extractEndDoubly(DoublyLL *l, int *error){
     if(*l == NULL){
-        *error = 1;
+        perror("Lista vacia");
+        *error = -1;
+        return -1;
     }else{
         Node* aux = *l;
         while(aux->sig != NULL){
             aux = aux->sig;
         }
-        *valor = aux->valor;
+        Data answer = aux->valor;
         aux->ant->sig = NULL;
         aux->ant=NULL;
         free(aux);
+        return answer;
     }
     *error = 0;
 }
 
-void extractNDoubly(DoublyLL *l, Data *valor, int pos, int *error){
+Data extractNDoubly(DoublyLL *l, int pos, int *error){
     if(*l == NULL){
-        *error = 1;
+        perror("Lista vacia");
+        *error = -1;
+        return -1;
     } else if(pos == 0){
-        extractBeginDoubly(l, valor, error);
-    } else if(pos == longitud(*l)){
-        extractEndDoubly(l, valor, error);
+        return extractBeginDoubly(l, error);
+    } else if(pos == lengthDoublyLL(*l)-1){
+        return extractEndDoubly(l, error);
     } else {
         Node* aux = *l, *aux2;
         while(aux->pos != pos){
             aux = aux->sig;
         }
-        *valor = aux->valor;
+        Data answer = aux->valor;
         aux->ant->sig = aux->sig;
         aux->sig->ant = aux->ant;
         aux2 = aux->sig;
@@ -178,11 +178,17 @@ void extractNDoubly(DoublyLL *l, Data *valor, int pos, int *error){
             aux2 = aux2->sig;
         }
         aux2->pos = aux2->pos - 1;
+        *error = 0;
+        return answer;
     }
-    *error = 0;
 }
 
-void clearDoublyLL(DoublyLL *l){
+void clearDoublyLL(DoublyLL *l, int *error){
+    if(*l == NULL){
+        perror("Lista vacia");
+        *error = -1;
+        return;
+    }
     Node* aux = *l;
     while(aux != NULL){
         *l = (*l)->sig;
@@ -191,6 +197,7 @@ void clearDoublyLL(DoublyLL *l){
         free(aux);
         aux = *l;
     }
+    *error = 0;
 }
 
 int lengthDoublyLL(DoublyLL l){
@@ -203,13 +210,15 @@ int lengthDoublyLL(DoublyLL l){
     return cont;
 }
 
-void copyDoublyLL(DoublyLL *l, DoublyLL *copia, int *error){
+DoublyLL *copyDoublyLL(DoublyLL *l, int *error){
+    DoublyLL *copy = create_doublyLL(error);
     Node* aux = *l;
     while(aux != NULL){
-        insertEndDoubly(copia, aux->valor, error);
+        insertEndDoubly(copy, aux->valor, error);
         aux = aux->sig;
     }
     *error = 0;
+    return copy;
 }
 
 void sortDoublyLL(DoublyLL *arreglo, int tam, int *error){
@@ -229,7 +238,7 @@ void sortDoublyLL(DoublyLL *arreglo, int tam, int *error){
         }
         sortDoublyLL(arrIzq,mitad,error);
         sortDoublyLL(arrDer,tam-mitad,error);
-        clearDoublyLL(arreglo);
+        clearDoublyLL(arreglo, error);
         mergeDoublyLL(arrIzq,mitad, arrDer,tam-mitad,arreglo,error);
     }
 }
@@ -240,22 +249,22 @@ void mergeDoublyLL(DoublyLL *arrIzq, int tamIzq, DoublyLL *arrDer, int tamDer, D
     while(i<tamIzq && j<tamDer){
         if((*arrIzq)->valor < (*arrDer)->valor){
             insertEndDoubly(arreglo,(*arrIzq)->valor,error);
-            extractBeginDoubly(arrIzq, val, error);
+            extractBeginDoubly(arrIzq, error);
             i++;
         } else{
             insertEndDoubly(arreglo,(*arrDer)->valor,error);
-            extractBeginDoubly(arrDer, val, error);
+            extractBeginDoubly(arrDer, error);
             j++;
         }
     }
     while(j<tamDer){
         insertEndDoubly(arreglo,(*arrDer)->valor,error);
-        extractBeginDoubly(arrDer, val, error);
+        extractBeginDoubly(arrDer, error);
         j++;
     }
     while(i<tamIzq){
         insertEndDoubly(arreglo,(*arrIzq)->valor,error);
-        extractBeginDoubly(arrIzq, val, error);
+        extractBeginDoubly(arrIzq, error);
         i++;
     }
 }
@@ -270,7 +279,7 @@ void reverseLinkedList(DoublyLL *lista, int *error){
         aux = aux->sig;
     }
     Node *aux2 = *lista;
-    int size = longitud(*lista);
+    int size = lengthDoublyLL(*lista);
     int l = 0, r=size-1;
     while (l<=r){
         int temp = aux->valor;
@@ -280,5 +289,58 @@ void reverseLinkedList(DoublyLL *lista, int *error){
         aux2 = aux2->sig;
         l++;
         r--;
+    }
+}
+
+int searchDLL(DoublyLL *l, Data value, int *error)
+{
+    if(*l == NULL){
+        perror("No se puede aplicar esta operacion\n");
+        *error = -1;
+    } else {
+        Node* aux = *l;
+        while(aux != NULL){
+            if(aux->valor == value){
+                return aux->pos;
+            }
+            aux = aux->sig;
+        }
+    }
+    *error = 0;
+    return -1;
+}
+
+void updateNodeDLL(DoublyLL *l, Data value, int pos, int *error){
+    if(*l == NULL){
+        perror("No se puede aplicar esta operacion\n");
+        *error = -1;
+    } else {
+        Node* aux = *l;
+        bool exists = false;
+        while(aux != NULL){
+            if(aux->pos == pos){
+                exists = true;
+                aux->valor = value;
+                break;
+            }
+            aux = aux->sig;
+        }
+        if(!exists){
+            perror("No existe el nodo\n");
+            *error = -1;
+        }
+    }
+    *error = 0;
+}
+
+void deleteDLL(DoublyLL *l, int *error){
+    if(*l == NULL){
+        perror("No se puede aplicar esta operacion\n");
+        *error = -1;
+    } else {
+        clearDoublyLL(l, error);
+        free(*l);
+        puts("Eliminando Lista");
+        *error = 0;
     }
 }
