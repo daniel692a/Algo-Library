@@ -9,6 +9,7 @@ int main(){
     int answer;
     int option;
     int pos;
+    int search;
     do{
         puts("Menú de ususario");
         puts("1.Insertar al inicio");
@@ -17,18 +18,19 @@ int main(){
         puts("4.Extraer del inicio");
         puts("5.Extraer del final");
         puts("6.Extraer de una posición");
-        puts("7.Limpiar la Lista");
-        puts("8.Copiar la Lista");
-        puts("9.Mostrar la Lista");
-        puts("10.Contar Nodos");
-        puts("11.Ordenar Lista");
+        puts("7.Mostrar Lista");
+        puts("8.Buscar un elemento");
+        puts("9.Copiar Lista");
+        puts("10.Limpiar Lista");
+        puts("11.Contar Nodos");
+        puts("12.Modificar Nodo");
         scanf("%d", &option);
         puts("-------------------------");
         switch (option){
             case 1:
                 puts("Inserte valor");
                 scanf("%d", &new);
-                insertStartDCLL(myList, new, &error);
+                insertBeginDCLL(myList, new, &error);
                 break;
             case 2:
                 puts("Inserte valor");
@@ -42,35 +44,41 @@ int main(){
                 insertNDCLL(myList, new, pos, &error);
                 break;
             case 4:
-                extractBeginDCLL(myList, &extract, &error);
+                extract = deleteBeginDCLL(myList, &error);
                 printf("El valor extraido es: %d\n", extract);
                 break;
             case 5:
-                extractEndDCLL(myList, &extract, &error);
+                extract = deleteEndDCLL(myList, &error);
                 printf("El valor extraido es: %d\n", extract);
                 break;
             case 6:
                 puts("Inserte la posición");
                 scanf("%d", &pos);
-                extractNDCLL(myList, &extract, pos, &error);
+                extract = deleteNDCLL(myList, pos, &error);
                 printf("El valor extraido es: %d\n", extract);
                 break;
             case 7:
-                clearDCLL(myList);
+                showDCLL(*myList);
                 break;
             case 8:
-                copyDCLL(myList, copyList, &error);
+                puts("Inserte el valor a buscar");
+                scanf("%d", &search);
+                printf("El elemento se encuentra en la posición: %d\n", searchDCLL(myList, search, &error));
                 break;
             case 9:
-                showDCLL(myList, &error);
+                copyList = copyDCLL(myList, &error);
+                showDCLL(*copyList);
                 break;
             case 10:
-                printf("La lista tiene %d nodos\n", lengthDCLL(*myList));
+                clearDCLL(myList, &error);
                 break;
             case 11:
-                sortDCLL(myList, lengthDCLL(*myList), &error);
-                puts("-------------------------");
-                showDCLL(myList, &error);
+                printf("La lista tiene %d nodos\n", lengthDCLL(*myList));
+                break;
+            case 12:
+                puts("Inserte el valor y la posición");
+                scanf("%d %d", &new, &pos);
+                updateNodeDCLL(myList, new, pos, &error);
                 break;
             default:
                 puts("No es una opcion valida");
@@ -80,5 +88,8 @@ int main(){
         scanf("%d", &answer);
         puts("-------------------------");
     } while (answer == 1);
+    deleteDCLL(myList, &error);
+    deleteDCLL(copyList, &error);
+    puts("Programa terminado");
     return 0;
 }
