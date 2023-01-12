@@ -10,7 +10,6 @@ struct NodeBST *newNode(int priority, int level, char expr[20], int answer){
     temp->priority = priority;
     temp->level = level;
     temp->answer = answer;
-    strcpy(temp->expr, expr);
     temp->left = temp->right = NULL;
     return temp;
 }
@@ -59,7 +58,7 @@ void printInOrder(struct NodeBST *root){
 }
 
 void printNodeBST(struct NodeBST *root){
-    printf("Expresion: %s\tPrioridad: %d\tEvaluación de la expresion: %d\tNivel: %d\n", root->expr, root->priority, root->answer, root->level);
+    printf("Prioridad: %d\tEvaluación de la expresion: %d\tNivel: %d\n", root->priority, root->answer, root->level);
 }
 
 struct NodeBST *deleteNode(struct NodeBST *root, int key){

@@ -27,3 +27,4 @@
 * [Dobly Linked List](./DoublyLinkedList/)
 * [Dobly Circular Linked List](./DoublyCircularLinkedList/)
 * [Binary Search Tree](./BST/)
+* [AVL Tree](./AVL/)
